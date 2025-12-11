@@ -1,23 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="pixel-card">
-    <h2 class="title">聊天室登入</h2>
 
-    <form method="POST" class="login-form">
+<div class="cute-card">
+
+    <h1 class="cute-title">聊天室登入 🍰</h1>
+
+    <form method="POST" class="cute-form">
+
         <label>名字：</label>
-        <input type="text" name="name" placeholder="輸入你的名字" value="{{name}}" required>
+        <input type="text" name="name" placeholder="輸入名字" value="{{name}}" required>
 
-        <label>房間代碼：</label>
-        <div class="row">
+        <label>房間代碼（若加入房間才需填）：</label>
+        <div class="cute-row">
             <input type="text" name="code" placeholder="房間代碼" value="{{code}}">
-            <button type="submit" name="join" class="btn-join">加入</button>
+            <button type="submit" name="join" class="btn-pixel-pink">加入</button>
         </div>
 
-        <button type="submit" name="create" class="btn-create">建立新房間</button>
+        <button type="submit" name="create" class="btn-pixel-green">
+            🍬 建立新房間
+        </button>
 
         {% if error %}
-            <p class="error">{{error}}</p>
+            <p class="cute-error">{{error}}</p>
         {% endif %}
+
     </form>
+
 </div>
+
 {% endblock %}
