@@ -1,38 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
-<form method="post" class="buttons">
 
-  <h3 style="color:#4bb36c; margin-bottom:5px;">聊天室登入</h3>
+<div class="pixel-window login-box">
+  <h2 class="pixel-title">Pixel Chatroom</h2>
 
-  <div>
-    <label>名字：</label>
-    <input
-      type="text"
-      placeholder="輸入你的名字"
-      name="name"
-      value="{{name}}"
-    />
-  </div>
+  <form method="post" class="buttons">
 
-  <div class="join">
-    <input
-      type="text"
-      placeholder="房間代碼"
-      name="code"
-      value="{{code}}"
-    />
-    <button type="submit" name="join">加入</button>
-  </div>
+    <input type="text" name="name" placeholder="Your Name" value="{{name}}" />
 
-  <button type="submit" name="create" class="create-btn">
-    建立新房間
-  </button>
+    <div class="join">
+      <input type="text" name="code" placeholder="Room Code" value="{{code}}" />
+      <button name="join">Join</button>
+    </div>
 
-  {% if error %}
-  <ul>
-    <li style="color:#ff8080">{{error}}</li>
-  </ul>
-  {% endif %}
+    <button name="create" class="create-btn">Create Room</button>
 
-</form>
+    {% if error %}
+      <p class="error">{{error}}</p>
+    {% endif %}
+
+  </form>
+</div>
+
 {% endblock %}

@@ -1,146 +1,69 @@
-/* ----- LINE Style Clean Theme ----- */
-
-/* 字體 */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
-
 body {
-  background: #1f2b24;  /* 深綠黑背景，舒服不刺眼 */
-  font-family: 'Inter', sans-serif;
-  padding: 0;
-  margin: 0;
-  color: white;
+    background: #1e1e2e url("https://i.imgur.com/0Z9B0iT.png");
+    background-size: cover;
+    font-family: "Press Start 2P", monospace;
+    color: #f5e9ff;
 }
 
-.content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 50px;
+.pixel-window {
+    padding: 20px;
+    border: 4px solid #ff8ae2;
+    box-shadow: 0px 0px 0px 4px #ffcdf5 inset;
+    background: rgba(40, 40, 60, 0.8);
+    border-radius: 6px;
 }
 
-/* ----- Home Page ----- */
-.buttons {
-  background: #2f3b34;
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.25);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  min-width: 330px;
-  text-align: center;
+.pixel-title {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 15px;
 }
 
-.buttons input {
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  background: #3c4a42;
-  color: white;
+.login-box {
+    width: 300px;
+    margin: auto;
+    margin-top: 100px;
 }
 
-.buttons input::placeholder {
-  color: #b8c2bc;
-}
-
-.buttons button {
-  background: #4bb36c;
-  border: none;
-  color: white;
-  padding: 12px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: 0.2s;
-  font-weight: 600;
-}
-
-.buttons button:hover {
-  background: #3da15c;
-}
-
-/* ----- Chat room ----- */
-.message-box {
-  background: #2f3b34;
-  border-radius: 20px;
-  padding: 20px;
-  width: 85vw;
-  height: 80vh;
-  box-shadow: 0 0 20px rgba(0,0,0,0.25);
-  display: flex;
-  flex-direction: column;
-}
-
-h2 {
-  color: #4bb36c;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-/* 訊息區 */
 .messages {
-  flex: 1;
-  overflow-y: scroll;
-  padding-right: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+    height: 60vh;
+    overflow-y: scroll;
+    padding-right: 10px;
 }
 
-/* 對方訊息 */
-.text {
-  background: #3c4a42;
-  padding: 12px;
-  border-radius: 12px;
-  max-width: 70%;
-  align-self: flex-start;
+.pixel-bubble {
+    background: #2d2d48;
+    margin: 5px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 2px solid #b480ff;
 }
 
-/* 自己訊息 */
-.me {
-  background: #4bb36c;
-  color: white;
-  align-self: flex-end;
-}
-
-/* 時間字 */
-.muted {
-  font-size: 10px;
-  opacity: 0.7;
-  margin-top: 3px;
-  text-align: right;
-}
-
-/* 輸入區 */
 .inputs {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
+    display: flex;
+    margin-top: 10px;
 }
 
 #message {
-  flex: 1;
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  background: #3c4a42;
-  color: white;
+    flex: 1;
 }
 
-#message::placeholder {
-  color: #b8c2bc;
+.join {
+    display: flex;
 }
 
-#send-btn {
-  padding: 12px 20px;
-  background: #4bb36c;
-  border: none;
-  border-radius: 12px;
-  color: white;
-  cursor: pointer;
-  transition: 0.2s;
-  font-weight: 600;
+button {
+    background: #ff8ae2;
+    border: none;
+    padding: 8px;
+    margin-left: 6px;
+    cursor: pointer;
 }
 
-#send-btn:hover {
-  background: #3da15c;
+button:hover {
+    background: #ffb3ef;
+}
+
+.error {
+    color: #ff6699;
 }
