@@ -1,85 +1,146 @@
+/* ----- LINE Style Clean Theme ----- */
+
+/* 字體 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+body {
+  background: #1f2b24;  /* 深綠黑背景，舒服不刺眼 */
+  font-family: 'Inter', sans-serif;
+  padding: 0;
+  margin: 0;
+  color: white;
+}
+
 .content {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  padding-top: 50px;
 }
 
+/* ----- Home Page ----- */
 .buttons {
+  background: #2f3b34;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.25);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  gap: 15px;
+  min-width: 330px;
+  text-align: center;
 }
 
-.join {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
+.buttons input {
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: #3c4a42;
+  color: white;
 }
 
-.create-btn {
-  width: 100%;
+.buttons input::placeholder {
+  color: #b8c2bc;
 }
 
+.buttons button {
+  background: #4bb36c;
+  border: none;
+  color: white;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
+}
+
+.buttons button:hover {
+  background: #3da15c;
+}
+
+/* ----- Chat room ----- */
 .message-box {
-  border-color: black;
-  border-width: 2px;
-  border-style: solid;
-  border-radius: 10px;
-  background-color: whitesmoke;
+  background: #2f3b34;
+  border-radius: 20px;
+  padding: 20px;
+  width: 85vw;
   height: 80vh;
+  box-shadow: 0 0 20px rgba(0,0,0,0.25);
   display: flex;
   flex-direction: column;
-  width: 80vw;
-  align-items: stretch;
-}
-
-.messages {
-  overflow-y: scroll;
-  flex: 1;
-  width: 100%;
-}
-
-.inputs {
-  padding: 10px;
-  display: flex;
 }
 
 h2 {
-  text-align: center;
+  color: #4bb36c;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* 訊息區 */
+.messages {
+  flex: 1;
+  overflow-y: scroll;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 對方訊息 */
+.text {
+  background: #3c4a42;
+  padding: 12px;
+  border-radius: 12px;
+  max-width: 70%;
+  align-self: flex-start;
+}
+
+/* 自己訊息 */
+.me {
+  background: #4bb36c;
+  color: white;
+  align-self: flex-end;
+}
+
+/* 時間字 */
+.muted {
+  font-size: 10px;
+  opacity: 0.7;
+  margin-top: 3px;
+  text-align: right;
+}
+
+/* 輸入區 */
+.inputs {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 #message {
   flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: #3c4a42;
+  color: white;
 }
 
-.text {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding-left: 10px;
-  padding-right: 10px;
+#message::placeholder {
+  color: #b8c2bc;
 }
 
-.muted {
-  font-size: 10px;
-  color: darkgray;
-}
-html, body {
-    height: 100%;
+#send-btn {
+  padding: 12px 20px;
+  background: #4bb36c;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
 }
 
-.content {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.text {
-  background: #ffecec;
-  padding: 10px;
-  border-radius: 10px;
-  margin: 8px;
+#send-btn:hover {
+  background: #3da15c;
 }

@@ -21,8 +21,10 @@
   const messages = document.getElementById("messages");
 
   const createMessage = (name, msg) => {
-    const content = `
-    <div class="text">
+  const isMe = name === "{{ session['name'] }}";
+
+  const content = `
+    <div class="text ${isMe ? 'me' : ''}">
         <span>
             <strong>${name}</strong>: ${msg}
         </span>
@@ -30,9 +32,10 @@
             ${new Date().toLocaleString()}
         </span>
     </div>
-    `;
-    messages.innerHTML += content;
-  };
+  `;
+  messages.innerHTML += content;
+};
+
 
   socketio.on("message", (data) => {
     createMessage(data.name, data.message);
