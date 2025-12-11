@@ -1,59 +1,67 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
 
-<h2 class="room-title">Room {{ room }}</h2>
+<div class="chat-container">
+    <h2 class="room-title">Chat Room: {{code}}</h2>
 
-<div id="chat-box" class="chat-box">
-    {% for msg in messages %}
-        <div class="msg">
-            <span class="avatar">{{ msg.avatar }}</span>
-            <b>{{ msg.user }}:</b> {{ msg.text }}
-        </div>
-    {% endfor %}
+    <div class="messages" id="messages"></div>
+
+    <div class="input-area">
+        <input id="message" type="text" placeholder="Message">
+        <button id="send-btn" onclick="sendMessage()">Send</button>
+    </div>
 </div>
 
-<input id="message-input" placeholder="Type...">
-<button onclick="sendMessage()">Send</button>
-
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-
 <script>
-const socket = io();
-const name = "{{ user }}";
-const room = "{{ room }}";
+    var socketio = io();
+    const messagesDiv = document.getElementById("messages");
 
-socket.emit("join", { name, room });
+    // 可愛的頭貼（愛心 / 星星 / 糖果）
+    const avatars = ["💖", "⭐", "🍬", "🍪"];
+    
+    // 隨機頭貼
+    const myAvatar = avatars[Math.floor(Math.random() * avatars.length)];
 
-socket.on("message", (data) => {
-    addMessage(data.avatar, data.user, data.text);
-});
+    function createMessage(avatar, name, msg) {
+        const box = document.createElement("div");
+        box.classList.add("msg-box");
 
-function addMessage(avatar, user, text) {
-    const box = document.getElementById("chat-box");
-    box.innerHTML += `
-        <div class="msg">
-            <span class="avatar">${avatar}</span>
-            <b>${user}:</b> ${text}
-        </div>
-    `;
-    box.scrollTop = box.scrollHeight;
-}
+        box.innerHTML = `
+            <div class="msg-avatar">${avatar}</div>
+            <div class="msg-text">
+                <strong>${name}</strong>: ${msg}
+                <span class="time">${new Date().toLocaleString()}</span>
+            </div>`;
 
-function sendMessage() {
-    const input = document.getElementById("message-input");
-    const text = input.value.trim();
-    if (!text) return;
-
-    socket.emit("message", { avatar: "⭐", user: name, text, room });
-    input.value = "";
-}
-
-document.getElementById("message-input").addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-        e.preventDefault();
-        sendMessage();
+        messagesDiv.appendChild(box);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
-});
+
+    socketio.on("message", (data) => {
+        createMessage(data.avatar, data.name, data.message);
+    });
+
+    function sendMessage() {
+        const input = document.getElementById("message");
+        if (!input.value.trim()) return;
+
+        socketio.emit("message", {
+            message: input.value,
+            avatar: myAvatar
+        });
+
+        input.value = "";
+    }
+
+    // Enter 送出訊息
+    document.getElementById("message").addEventListener("keyup", function(e){
+        if (e.key === "Enter") sendMessage();
+    });
+
+    // 載入歷史訊息
+    {% for msg in messages %}
+        createMessage("{{msg.avatar}}", "{{msg.name}}", "{{msg.message}}");
+    {% endfor %}
 </script>
 
 {% endblock %}

@@ -1,21 +1,23 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<h2 class="title">Pixel Chatroom</h2>
+<div class="pixel-card">
+    <h2 class="title">聊天室登入</h2>
 
-<form method="POST">
-    <input type="text" name="name" placeholder="Your Name">
+    <form method="POST" class="login-form">
+        <label>名字：</label>
+        <input type="text" name="name" placeholder="輸入你的名字" value="{{name}}" required>
 
-    <input type="text" name="room" placeholder="Room Code">
+        <label>房間代碼：</label>
+        <div class="row">
+            <input type="text" name="code" placeholder="房間代碼" value="{{code}}">
+            <button type="submit" name="join" class="btn-join">加入</button>
+        </div>
 
-    <button type="submit">Join</button>
-</form>
+        <button type="submit" name="create" class="btn-create">建立新房間</button>
 
-<form action="/create" method="POST">
-    <input type="text" name="name" placeholder="Your Name">
-    <button>Create Room</button>
-</form>
-
-{% if error %}
-<p class="error">{{ error }}</p>
-{% endif %}
+        {% if error %}
+            <p class="error">{{error}}</p>
+        {% endif %}
+    </form>
+</div>
 {% endblock %}
