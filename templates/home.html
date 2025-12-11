@@ -1,24 +1,44 @@
 {% extends 'base.html' %} {% block content %}
 <form method="post" class="buttons">
-  <h3>Enter The Chat Room</h3>
+  {% extends 'base.html' %}
+{% block content %}
+<form method="post" class="buttons">
+
+  <h3 style="color:#ff66b3; margin-bottom:5px;">歡迎進入聊天室</h3>
+
   <div>
-    <label>Name:</label>
+    <label>你的名字：</label>
     <input
       type="text"
-      placeholder="Pick a name!"
+      placeholder="輸入名字"
       name="name"
       value="{{name}}"
     />
   </div>
+
   <div class="join">
-    <input type="text" placeholder="Room Code" name="code" value="{{code}}" />
-    <button type="submit" name="join">Join a Room</button>
+    <input
+      type="text"
+      placeholder="房間代碼"
+      name="code"
+      value="{{code}}"
+      style="border-radius:10px; border:2px solid #ffcce7;"
+    />
+    <button type="submit" name="join">加入</button>
   </div>
-  <button type="submit" name="create" class="create-btn">Create a Room</button>
+
+  <button type="submit" name="create" class="create-btn">
+    建立房間
+  </button>
+
   {% if error %}
   <ul>
-    <li>{{error}}</li>
+    <li style="color:#ff5b94">{{error}}</li>
   </ul>
   {% endif %}
+
+</form>
+{% endblock %}
+
 </form>
 {% endblock %}
