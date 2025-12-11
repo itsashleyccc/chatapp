@@ -1,18 +1,12 @@
-@socketio.on("message")
-def message(data):
-    room = data["room"]
-    name = data["name"]
-    text = data["text"]
-    avatar = data["avatar"]
+from flask import Flask, render_template, request, session, redirect, url_for
+from flask_socketio import SocketIO, join_room, leave_room
+from datetime import datetime
+import random
+from string import ascii_uppercase
+import os
 
-    timestamp = datetime.now().strftime("%Y/%m/%d %p %I:%M:%S")
+app = Flask(__name__)
+app.config["SECRET_KEY"] = "ashleyiscute"
+socketio = SocketIO(app)
 
-    msg = {
-        "name": name,
-        "text": text,
-        "avatar": avatar,
-        "time": timestamp
-    }
-
-    rooms[room]["messages"].append(msg)
-    socketio.emit("message", msg, to=room)
+rooms = {}  # room_code: {members: int, messages: []}
