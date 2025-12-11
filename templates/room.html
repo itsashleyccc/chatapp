@@ -1,68 +1,76 @@
-{% extends 'base.html' %}
-{% block content %}
-
-<div class="chat-shell">
-    <div class="room-title">房間 {{ room }}</div>
-
-    <div id="messages" class="messages"></div>
-
-    <div class="chat-input-row">
-        <input id="msg" type="text" placeholder="輸入訊息…">
-        <button onclick="sendMessage()" class="btn-send">送出</button>
-    </div>
-</div>
-
 <script>
     const socket = io();
     const room = "{{ room }}";
     const name = "{{ name }}";
 
-    socket.emit("join", { room: room, name: name });
+    // 固定使用者頭像（登入後產生一次）
+    const avatars = ["✨","🌙","🌸","⭐","☁️","💖","🦄","🍓","🌈"];
+    const myAvatar = avatars[Math.floor(Math.random() * avatars.length)];
 
-    function addMessage(data) {
-        const box = document.getElementById("messages");
-        let div = document.createElement("div");
-        div.classList.add("bubble");
+    socket.emit("join", { room, name, avatar: myAvatar });
 
-        div.innerHTML = `
-            <span class="avatar">${data.avatar}</span>
-            <span class="name">${data.name}</span>：
-            <span>${data.text}</span>
-            <div class="time">${data.time}</div>
+    function createMessage(data) {
+        const messagesDiv = document.getElementById("messages");
+
+        const wrap = document.createElement("div");
+        wrap.classList.add("bubble");
+
+        // 位置：自己 → 右邊
+        if (data.name === name) {
+            wrap.classList.add("me");
+        } else {
+            wrap.classList.add("other");
+        }
+
+        wrap.innerHTML = `
+            <div class="bubble-avatar">${data.avatar}</div>
+            <div>
+                <strong>${data.name}</strong><br>
+                ${data.text}
+                <div class="bubble-time">${data.time}</div>
+            </div>
         `;
 
-        box.appendChild(div);
-        box.scrollTop = box.scrollHeight;
+        messagesDiv.appendChild(wrap);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
-    socket.on("message", data => addMessage(data));
+    // 收訊息
+    socket.on("message", data => {
+        createMessage(data);
+    });
 
+    // 發送訊息
     function sendMessage() {
-        const msgInput = document.getElementById("msg");
-        let text = msgInput.value.trim();
+        const input = document.getElementById("message");
+        const text = input.value.trim();
         if (!text) return;
 
         socket.emit("message", {
-            room: room,
-            name: name,
-            text: text
+            room,
+            name,
+            avatar: myAvatar,
+            text
         });
 
-        msgInput.value = "";
+        input.value = "";
     }
 
-    document.getElementById("msg").addEventListener("keydown", e => {
-        if (e.key === "Enter") sendMessage();
+    // Enter 送出
+    document.getElementById("message").addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            sendMessage();
+        }
     });
 
-    {% for m in messages %}
-    addMessage({
-        avatar: "{{ m['avatar'] }}",
-        name: "{{ m['name'] }}",
-        text: "{{ m['text'] }}",
-        time: "{{ m['time'] }}"
+    // 讀取歷史訊息
+    {% for msg in messages %}
+    createMessage({
+        name: "{{ msg['name'] }}",
+        text: "{{ msg['text'] }}",
+        avatar: "{{ msg['avatar'] }}",
+        time: "{{ msg['time'] }}"
     });
     {% endfor %}
 </script>
-
-{% endblock %}
