@@ -1,95 +1,128 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
 body {
-    background: linear-gradient(#F7B5E8, #A8D8FF);
-    font-family: "Press Start 2P", cursive;
-    padding: 60px 0;
+    background: linear-gradient(180deg, #f8c8ff, #c7b8ff, #8ab5ff);
+    font-family: 'Courier New', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-/* Login card */
-.celeste-card {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(6px);
-    width: 480px;
-    margin: auto;
-    padding: 35px;
-    border: 3px solid #FFD4F0;
-    border-radius: 14px;
-    box-shadow: 0 0 20px #fff5;
-}
-
-.celeste-title {
-    text-align: center;
-    color: #4A3C6E;
-    font-size: 22px;
-    margin-bottom: 30px;
-}
-
-.celeste-label {
-    color: #4A3C6E;
-    font-size: 12px;
-}
-
-.input-pixel {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0 15px 0;
-    border: 2px solid #4A3C6E;
-    border-radius: 6px;
-    background: #FFF0F9;
-}
-
-/* Buttons */
-.btn-pink {
-    width: 100%;
-    background: #FFD4F0;
-    border: 3px solid #FFB2D0;
-    padding: 12px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-.btn-blue {
-    background: #AEE2FF;
-    border: 3px solid #7DC7FF;
-    padding: 12px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-/* Chatroom */
-.chat-box {
+/* LOGIN BOX */
+.login-box {
+    width: 430px;
+    padding: 30px;
     background: rgba(255,255,255,0.3);
-    width: 80%;
-    margin: auto;
-    padding: 25px;
-    border-radius: 12px;
-    border: 3px solid #FFD4F0;
+    border: 3px solid #fff;
+    border-radius: 15px;
+    backdrop-filter: blur(6px);
+}
+
+.title-pixel {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 2px 2px #ff6ee6;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    background: #ffeaff;
+}
+
+.btn-join, .btn-create {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-join {
+    background: #ff9adb;
+}
+
+.btn-create {
+    background: #9dffad;
+}
+
+.err {
+    color: red;
+    margin-top: 10px;
+}
+
+
+/* ROOM */
+.chat-shell {
+    width: 70vw;
+    height: 80vh;
+    background: rgba(255,255,255,0.25);
+    border: 4px solid white;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.room-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px #ff6ee6;
 }
 
 .messages {
-    background: rgba(255,255,255,0.4);
-    height: 65vh;
+    flex-grow: 1;
     overflow-y: auto;
-    border-radius: 8px;
-    padding: 18px;
+    padding: 10px;
+    margin-top: 10px;
 }
 
 .bubble {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    border-left: 6px solid #ff6ee6;
+}
+
+.avatar {
+    font-size: 20px;
+}
+
+.time {
+    color: gray;
+    font-size: 12px;
+}
+
+.chat-input-row {
     display: flex;
-    gap: 12px;
-    background: #FFEAF7;
-    border: 2px solid #FFB7D5;
+    gap: 10px;
+}
+
+#msg {
+    flex-grow: 1;
     padding: 12px;
-    margin: 12px 0;
+    border: 2px solid white;
     border-radius: 10px;
 }
 
-.bubble-avatar {
-    font-size: 26px;
-}
-
-.bubble-time {
-    font-size: 10px;
-    opacity: .6;
-    margin-top: 4px;
+.btn-send {
+    padding: 12px 20px;
+    background: #ff6ee6;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
 }

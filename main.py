@@ -1,105 +1,104 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
 from datetime import datetime
-import random
 from string import ascii_uppercase
-import os   # ←←← VERY IMPORTANT
+import random
+import os
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "ashleyiscute"
 socketio = SocketIO(app)
 
-rooms = {}  # room_code: {members: int, messages: []}
+rooms = {}  # { room_code: { members: int, messages: [] } }
 
-# ----------------------
-# Helper：產生房間代碼
-# ----------------------
+
+# 房間代碼
 def generate_room_code(length=4):
     return "".join(random.choice(ascii_uppercase) for _ in range(length))
 
 
-# ----------------------
-# Home Page
-# ----------------------
 @app.route("/", methods=["GET", "POST"])
 def home():
-    session.clear()
-
     if request.method == "POST":
-        name = request.form.get("name")
-        room = request.form.get("room")
+        name = request.form.get("name", "").strip()
+        code = request.form.get("code", "").strip().upper()
         action = request.form.get("action")
 
         if not name:
-            return render_template("home.html", error="請輸入名字！")
+            return render_template("home.html", error="請輸入名字")
 
-        session["name"] = name
-
-        # ➤ 使用者要加入房間
+        # 加入房間
         if action == "join":
-            if room not in rooms:
-                return render_template("home.html", error="房間不存在！")
-            session["room"] = room
-            return redirect(url_for("room_page"))
+            if not code:
+                return render_template("home.html",
+                                       error="請輸入房間代碼",
+                                       name=name)
+            if code not in rooms:
+                return render_template("home.html",
+                                       error="房間不存在",
+                                       name=name)
+            room = code
 
-        # ➤ 使用者要創建房間
+        # 建立新房間
         elif action == "create":
             room = generate_room_code()
             rooms[room] = {"members": 0, "messages": []}
-            session["room"] = room
-            return redirect(url_for("room_page"))
+
+        session["name"] = name
+        session["room"] = room
+
+        return redirect(url_for("room_page"))
 
     return render_template("home.html")
 
 
-# ----------------------
-# 房間頁面
-# ----------------------
 @app.route("/room")
 def room_page():
     room = session.get("room")
     name = session.get("name")
 
-    if room not in rooms or not name:
+    if not room or room not in rooms:
         return redirect(url_for("home"))
 
     return render_template("room.html",
                            room=room,
+                           name=name,
                            messages=rooms[room]["messages"])
 
 
-# ----------------------
-# SocketIO 事件
-# ----------------------
-@socketio.on("connect")
-def connect():
-    room = session.get("room")
-    name = session.get("name")
-
-    if not room or not name:
-        return
+# -------- SocketIO --------
+@socketio.on("join")
+def on_join(data):
+    room = data["room"]
+    name = data["name"]
 
     join_room(room)
     rooms[room]["members"] += 1
 
-    timestamp = datetime.now().strftime("%Y/%m/%d %p %I:%M:%S")
-    msg = {"avatar": "💖", "text": f"{name} has entered the room", "time": timestamp}
+    msg = {
+        "avatar": "✨",
+        "name": name,
+        "text": f"{name} 進入了聊天室",
+        "time": datetime.now().strftime("%H:%M")
+    }
 
     rooms[room]["messages"].append(msg)
     socketio.emit("message", msg, to=room)
 
 
 @socketio.on("message")
-def message(data):
-    room = session.get("room")
-    name = session.get("name")
+def handle_message(data):
+    room = data["room"]
+    text = data["text"]
+    name = data["name"]
 
-    timestamp = datetime.now().strftime("%Y/%m/%d %p %I:%M:%S")
+    avatar = random.choice(["✨","🌙","🌸","⭐","☁️","💖"])
 
     msg = {
-        "avatar": "⭐",   # 隨機頭貼可改
-        "text": f"{name}: {data['text']}",
-        "time": timestamp
+        "avatar": avatar,
+        "name": name,
+        "text": text,
+        "time": datetime.now().strftime("%H:%M")
     }
 
     rooms[room]["messages"].append(msg)
@@ -107,9 +106,12 @@ def message(data):
 
 
 @socketio.on("disconnect")
-def disconnect():
+def on_disconnect():
     room = session.get("room")
     name = session.get("name")
+
+    if not room:
+        return
 
     leave_room(room)
 
@@ -119,9 +121,6 @@ def disconnect():
             del rooms[room]
 
 
-# ----------------------
-# REALLY IMPORTANT: Render 要這段才能啟動
-# ----------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     socketio.run(app, host="0.0.0.0", port=port)

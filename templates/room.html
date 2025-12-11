@@ -1,57 +1,68 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="chat-box">
-
-    <h2 class="room-title">Room: {{code}}</h2>
+<div class="chat-shell">
+    <div class="room-title">房間 {{ room }}</div>
 
     <div id="messages" class="messages"></div>
 
-    <div class="input-row">
-        <input id="message" placeholder="Type your message..." class="input-pixel">
-        <button onclick="sendMessage()" class="btn-pink">Send</button>
+    <div class="chat-input-row">
+        <input id="msg" type="text" placeholder="輸入訊息…">
+        <button onclick="sendMessage()" class="btn-send">送出</button>
     </div>
-
 </div>
 
 <script>
-    var socketio = io();
+    const socket = io();
+    const room = "{{ room }}";
+    const name = "{{ name }}";
 
-    const avatars = ["✨","🌙","🌸","⭐","☁️"];
-    const myAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+    socket.emit("join", { room: room, name: name });
 
-    function addMessage(avatar, name, msg, time) {
-        const area = document.getElementById("messages");
+    function addMessage(data) {
+        const box = document.getElementById("messages");
+        let div = document.createElement("div");
+        div.classList.add("bubble");
 
-        const bubble = document.createElement("div");
-        bubble.classList.add("bubble");
-        bubble.innerHTML = `
-            <div class="bubble-avatar">${avatar}</div>
-            <div>
-                <strong>${name}</strong>: ${msg}
-                <div class="bubble-time">${time}</div>
-            </div>
+        div.innerHTML = `
+            <span class="avatar">${data.avatar}</span>
+            <span class="name">${data.name}</span>：
+            <span>${data.text}</span>
+            <div class="time">${data.time}</div>
         `;
 
-        area.appendChild(bubble);
-        area.scrollTop = area.scrollHeight;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
     }
 
-    socketio.on("message", data => {
-        addMessage(data.avatar, data.name, data.message, data.time);
-    });
+    socket.on("message", data => addMessage(data));
 
     function sendMessage() {
-        const input = document.getElementById("message");
-        if (!input.value.trim()) return;
+        const msgInput = document.getElementById("msg");
+        let text = msgInput.value.trim();
+        if (!text) return;
 
-        socketio.emit("message", {message: input.value, avatar: myAvatar});
-        input.value = "";
+        socket.emit("message", {
+            room: room,
+            name: name,
+            text: text
+        });
+
+        msgInput.value = "";
     }
 
-    document.getElementById("message").addEventListener("keyup", e => {
+    document.getElementById("msg").addEventListener("keydown", e => {
         if (e.key === "Enter") sendMessage();
     });
+
+    {% for m in messages %}
+    addMessage({
+        avatar: "{{ m['avatar'] }}",
+        name: "{{ m['name'] }}",
+        text: "{{ m['text'] }}",
+        time: "{{ m['time'] }}"
+    });
+    {% endfor %}
 </script>
 
 {% endblock %}

@@ -1,28 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="celeste-card">
-
-    <h1 class="celeste-title">Pixel Chatroom</h1>
+<div class="login-box">
+    <h1 class="title-pixel">Pixel Chatroom</h1>
 
     <form method="POST">
+        <label>名字：</label>
+        <input type="text" name="name" placeholder="輸入你的名字">
 
-        <label class="celeste-label">Name</label>
-        <input name="name" class="input-pixel" placeholder="Enter your name">
+        <label>房間代碼（加入房間時用）：</label>
+        <input type="text" name="code" placeholder="例如 ABCD">
 
-        <label class="celeste-label">Room Code (only for joining)</label>
-        <div class="row">
-            <input name="code" class="input-pixel" placeholder="ABCD">
-            <button name="join" class="btn-blue">Join</button>
-        </div>
-
-        <button name="create" class="btn-pink">Create New Room</button>
+        <button name="action" value="join" class="btn-join">加入房間</button>
+        <button name="action" value="create" class="btn-create">建立新房間</button>
 
         {% if error %}
-            <p class="error-msg">{{error}}</p>
+        <p class="err">{{ error }}</p>
         {% endif %}
     </form>
-
 </div>
 
 {% endblock %}
