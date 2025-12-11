@@ -99,5 +99,7 @@ def disconnect():
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")
 
+import os
+
 if __name__ == "__main__":
-    socketio.run(app, host="0.0.0.0", port=10000)
+    socketio.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

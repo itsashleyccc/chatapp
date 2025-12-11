@@ -77,3 +77,9 @@ html, body {
     align-items: center;
     justify-content: center;
 }
+.text {
+  background: #ffecec;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 8px;
+}
