@@ -91,3 +91,8 @@ def disconnect():
         rooms[room]["members"] -= 1
         if rooms[room]["members"] <= 0:
             del rooms[room]
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    socketio.run(app, host="0.0.0.0", port=port)
