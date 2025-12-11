@@ -1,57 +1,59 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
 
-<div class="message-box pixel-window">
-  <h2 class="pixel-title">Chat Room: {{code}}</h2>
+<h2 class="room-title">Room {{ room }}</h2>
 
-  <div class="messages" id="messages"></div>
-
-  <div class="inputs">
-    <input
-      type="text"
-      placeholder="Type message…"
-      id="message"
-    />
-    <button id="send-btn" onclick="sendMessage()">Send</button>
-  </div>
+<div id="chat-box" class="chat-box">
+    {% for msg in messages %}
+        <div class="msg">
+            <span class="avatar">{{ msg.avatar }}</span>
+            <b>{{ msg.user }}:</b> {{ msg.text }}
+        </div>
+    {% endfor %}
 </div>
 
+<input id="message-input" placeholder="Type...">
+<button onclick="sendMessage()">Send</button>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
 <script>
-  var socketio = io();
-  const messages = document.getElementById("messages");
+const socket = io();
+const name = "{{ user }}";
+const room = "{{ room }}";
 
-  const createMessage = (avatar, name, msg) => {
-      const content = `
-      <div class="text pixel-bubble">
-          <span>
-              <strong>${avatar} ${name}</strong>: ${msg}
-          </span>
-          <span class="muted">${new Date().toLocaleString()}</span>
-      </div>`;
-      messages.innerHTML += content;
-  };
+socket.emit("join", { name, room });
 
-  socketio.on("message", (data) => {
-      createMessage(data.avatar, data.name, data.message);
-  });
+socket.on("message", (data) => {
+    addMessage(data.avatar, data.user, data.text);
+});
 
-  const sendMessage = () => {
-      const message = document.getElementById("message");
-      if (message.value.trim() === "") return;
-      socketio.emit("message", { data: message.value });
-      message.value = "";
-  };
+function addMessage(avatar, user, text) {
+    const box = document.getElementById("chat-box");
+    box.innerHTML += `
+        <div class="msg">
+            <span class="avatar">${avatar}</span>
+            <b>${user}:</b> ${text}
+        </div>
+    `;
+    box.scrollTop = box.scrollHeight;
+}
 
-  // ENTER 鍵送出訊息
-  document.getElementById("message").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") sendMessage();
-  });
+function sendMessage() {
+    const input = document.getElementById("message-input");
+    const text = input.value.trim();
+    if (!text) return;
+
+    socket.emit("message", { avatar: "⭐", user: name, text, room });
+    input.value = "";
+}
+
+document.getElementById("message-input").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        sendMessage();
+    }
+});
 </script>
-
-{% for msg in messages %}
-<script>
-    createMessage("{{msg.avatar}}", "{{msg.name}}", "{{msg.message}}");
-</script>
-{% endfor %}
 
 {% endblock %}

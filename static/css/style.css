@@ -1,69 +1,53 @@
 body {
-    background: #1e1e2e url("https://i.imgur.com/0Z9B0iT.png");
+    margin: 0;
+    font-family: monospace;
+    background-color: #222;
+}
+
+.pixel-bg {
+    background-image: url("https://64.media.tumblr.com/1f0f9f1cfa3b8ec8e8e1df9c3b68a3b3/tumblr_nk0r8oMVaQ1s2x4y5o1_500.gif");
     background-size: cover;
-    font-family: "Press Start 2P", monospace;
-    color: #f5e9ff;
+    background-position: center;
+    filter: brightness(0.4);
+    position: fixed;
+    inset: 0;
+    z-index: -1;
 }
 
-.pixel-window {
-    padding: 20px;
-    border: 4px solid #ff8ae2;
-    box-shadow: 0px 0px 0px 4px #ffcdf5 inset;
-    background: rgba(40, 40, 60, 0.8);
-    border-radius: 6px;
+.content-box {
+    background: rgba(255, 180, 255, 0.25);
+    border: 2px solid pink;
+    padding: 25px;
+    width: 330px;
+    margin: 100px auto;
+    border-radius: 12px;
+    backdrop-filter: blur(3px);
 }
 
-.pixel-title {
-    text-align: center;
-    font-size: 16px;
-    margin-bottom: 15px;
-}
-
-.login-box {
-    width: 300px;
-    margin: auto;
-    margin-top: 100px;
-}
-
-.messages {
-    height: 60vh;
-    overflow-y: scroll;
-    padding-right: 10px;
-}
-
-.pixel-bubble {
-    background: #2d2d48;
-    margin: 5px;
-    padding: 8px;
-    border-radius: 4px;
-    border: 2px solid #b480ff;
-}
-
-.inputs {
-    display: flex;
+input, button {
+    width: 100%;
     margin-top: 10px;
-}
-
-#message {
-    flex: 1;
-}
-
-.join {
-    display: flex;
-}
-
-button {
-    background: #ff8ae2;
-    border: none;
     padding: 8px;
-    margin-left: 6px;
-    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid #fff;
+    background: rgba(255,255,255,0.8);
 }
 
-button:hover {
-    background: #ffb3ef;
+.chat-box {
+    width: 100%;
+    height: 250px;
+    background: rgba(255,255,255,0.3);
+    border: 2px solid #fff;
+    overflow-y: auto;
+    padding: 5px;
+    margin-bottom: 10px;
 }
 
-.error {
-    color: #ff6699;
+.msg {
+    margin-bottom: 5px;
+}
+
+.avatar {
+    font-size: 20px;
+    margin-right: 5px;
 }

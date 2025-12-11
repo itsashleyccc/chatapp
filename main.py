@@ -1,100 +1,79 @@
-from flask import Flask, render_template, request, session, redirect, url_for
-from flask_socketio import join_room, leave_room, send, SocketIO
+from flask import Flask, render_template, request, redirect
+from flask_socketio import SocketIO, join_room, leave_room, send
 import random
-from string import ascii_uppercase
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "hjhjsdahhds"
+app.config["SECRET_KEY"] = "pixelchatsecret"
 socketio = SocketIO(app)
 
-PIXEL_ICONS = ["⭐", "💖", "🌙", "💎"]
-rooms = {}
+rooms = {}  # room_code: { "messages": [] }
 
-def generate_unique_code(length):
-    while True:
-        code = "".join(random.choice(ascii_uppercase) for _ in range(length))
-        if code not in rooms:
-            return code
+avatars = ["⭐", "💖", "🌙", "💫", "✨", "🌟"]
 
-@app.route("/", methods=["POST", "GET"])
+@app.route("/", methods=["GET", "POST"])
 def home():
-    session.clear()
     if request.method == "POST":
         name = request.form.get("name")
-        code = request.form.get("code")
-        join = request.form.get("join", False)
-        create = request.form.get("create", False)
+        room = request.form.get("room")
 
-        if not name:
-            return render_template("home.html", error="Please enter a name.", code=code, name=name)
+        if not name or not room:
+            return render_template("home.html", error="Enter name & room code!")
 
-        if join and not code:
-            return render_template("home.html", error="Please enter a room code.", code=code, name=name)
+        if room not in rooms:
+            return render_template("home.html", error="Room does not exist.")
 
-        if create:
-            room = generate_unique_code(4)
-            rooms[room] = {"members": 0, "messages": []}
-        elif code not in rooms:
-            return render_template("home.html", error="Room does not exist.", code=code, name=name)
-        else:
-            room = code
-
-        session["room"] = room
-        session["name"] = name
-        session["avatar"] = random.choice(PIXEL_ICONS)
-
-        return redirect(url_for("room"))
+        return redirect(f"/room?name={name}&room={room}")
 
     return render_template("home.html")
 
+
+@app.route("/create", methods=["POST"])
+def create():
+    name = request.form.get("name")
+    room = str(random.randint(1000, 9999))
+
+    rooms[room] = {"messages": []}
+
+    return redirect(f"/room?name={name}&room={room}")
+
+
 @app.route("/room")
 def room():
-    room = session.get("room")
-    if room is None or session.get("name") is None or room not in rooms:
-        return redirect(url_for("home"))
+    name = request.args.get("name")
+    room = request.args.get("room")
 
-    return render_template("room.html", code=room, messages=rooms[room]["messages"])
-
-@socketio.on("message")
-def message(data):
-    room = session.get("room")
     if room not in rooms:
-        return
+        return "Room does not exist."
 
-    content = {
-        "name": session.get("name"),
-        "avatar": session.get("avatar"),
-        "message": data["data"]
-    }
+    return render_template(
+        "room.html",
+        user=name,
+        room=room,
+        messages=rooms[room]["messages"],
+    )
 
-    send(content, to=room)
-    rooms[room]["messages"].append(content)
 
-@socketio.on("connect")
-def connect(auth):
-    room = session.get("room")
-    name = session.get("name")
-    if not room or not name or room not in rooms:
-        return
+@socketio.on("join")
+def handle_join(data):
+    name = data["name"]
+    room = data["room"]
 
     join_room(room)
-    send({"name": name, "avatar": "⭐", "message": "entered the room"}, to=room)
-    rooms[room]["members"] += 1
 
-@socketio.on("disconnect")
-def disconnect():
-    room = session.get("room")
-    name = session.get("name")
-    leave_room(room)
+    avatar = random.choice(avatars)
 
-    if room in rooms:
-        rooms[room]["members"] -= 1
-        if rooms[room]["members"] <= 0:
-            del rooms[room]
+    rooms[room]["messages"].append({"user": name, "avatar": avatar, "text": "joined the room"})
 
-    send({"name": name, "avatar": "💨", "message": "left the room"}, to=room)
+    send({"user": name, "avatar": avatar, "text": "joined the room"}, to=room)
 
-import os
+
+@socketio.on("message")
+def handle_message(data):
+    room = data["room"]
+    rooms[room]["messages"].append(data)
+    
+    send(data, to=room)
+
 
 if __name__ == "__main__":
-    socketio.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    socketio.run(app, host="0.0.0.0", port=10000)
