@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="chat-wrapper">
+<div class="chat-box">
 
-    <h2 class="room-header">房間：{{code}} 🍡</h2>
+    <h2 class="room-title">Room: {{code}}</h2>
 
-    <div id="messages" class="message-area"></div>
+    <div id="messages" class="messages"></div>
 
     <div class="input-row">
-        <input id="message" placeholder="輸入訊息…" />
-        <button onclick="sendMessage()" id="send-btn" class="btn-pixel-pink">送出</button>
+        <input id="message" placeholder="Type your message..." class="input-pixel">
+        <button onclick="sendMessage()" class="btn-pink">Send</button>
     </div>
 
 </div>
@@ -17,23 +17,27 @@
 <script>
     var socketio = io();
 
-    const avatars = ["💖","⭐","🍬","🍪","🍓","🍰"];
+    const avatars = ["✨","🌙","🌸","⭐","☁️"];
     const myAvatar = avatars[Math.floor(Math.random() * avatars.length)];
 
     function addMessage(avatar, name, msg, time) {
-        const box = document.createElement("div");
-        box.classList.add("msg-box");
-        box.innerHTML = `
-            <div class="avatar">${avatar}</div>
-            <div class="msg">
+        const area = document.getElementById("messages");
+
+        const bubble = document.createElement("div");
+        bubble.classList.add("bubble");
+        bubble.innerHTML = `
+            <div class="bubble-avatar">${avatar}</div>
+            <div>
                 <strong>${name}</strong>: ${msg}
-                <div class="time">${time}</div>
+                <div class="bubble-time">${time}</div>
             </div>
         `;
-        document.getElementById("messages").appendChild(box);
+
+        area.appendChild(bubble);
+        area.scrollTop = area.scrollHeight;
     }
 
-    socketio.on("message", (data) => {
+    socketio.on("message", data => {
         addMessage(data.avatar, data.name, data.message, data.time);
     });
 
@@ -41,21 +45,13 @@
         const input = document.getElementById("message");
         if (!input.value.trim()) return;
 
-        socketio.emit("message", {
-            message: input.value,
-            avatar: myAvatar
-        });
-
+        socketio.emit("message", {message: input.value, avatar: myAvatar});
         input.value = "";
     }
 
-    document.getElementById("message").addEventListener("keyup", function(e){
+    document.getElementById("message").addEventListener("keyup", e => {
         if (e.key === "Enter") sendMessage();
     });
-
-    {% for msg in messages %}
-        addMessage("{{msg.avatar}}", "{{msg.name}}", "{{msg.message}}", "{{msg.time}}");
-    {% endfor %}
 </script>
 
 {% endblock %}

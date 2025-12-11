@@ -1,29 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="cute-card">
+<div class="celeste-card">
 
-    <h1 class="cute-title">聊天室登入 🍰</h1>
+    <h1 class="celeste-title">Pixel Chatroom</h1>
 
-    <form method="POST" class="cute-form">
+    <form method="POST">
 
-        <label>名字：</label>
-        <input type="text" name="name" placeholder="輸入名字" value="{{name}}" required>
+        <label class="celeste-label">Name</label>
+        <input name="name" class="input-pixel" placeholder="Enter your name">
 
-        <label>房間代碼（若加入房間才需填）：</label>
-        <div class="cute-row">
-            <input type="text" name="code" placeholder="房間代碼" value="{{code}}">
-            <button type="submit" name="join" class="btn-pixel-pink">加入</button>
+        <label class="celeste-label">Room Code (only for joining)</label>
+        <div class="row">
+            <input name="code" class="input-pixel" placeholder="ABCD">
+            <button name="join" class="btn-blue">Join</button>
         </div>
 
-        <button type="submit" name="create" class="btn-pixel-green">
-            🍬 建立新房間
-        </button>
+        <button name="create" class="btn-pink">Create New Room</button>
 
         {% if error %}
-            <p class="cute-error">{{error}}</p>
+            <p class="error-msg">{{error}}</p>
         {% endif %}
-
     </form>
 
 </div>

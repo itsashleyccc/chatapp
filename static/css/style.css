@@ -1,129 +1,95 @@
-/* —— 全站背景 —— */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 body {
-    background: #FFF4F9;
-    font-family: "Press Start 2P", "微軟正黑體", sans-serif;
+    background: linear-gradient(#F7B5E8, #A8D8FF);
+    font-family: "Press Start 2P", cursive;
+    padding: 60px 0;
 }
 
-/* —— 登入卡片 —— */
-.cute-card {
-    background: #FFE7F1;
-    width: 420px;
-    margin: 80px auto;
-    padding: 30px;
-    border: 4px solid #FFB7D5;
-    border-radius: 12px;
-    box-shadow: 0 0 0 4px #FFCFE3;
+/* Login card */
+.celeste-card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
+    width: 480px;
+    margin: auto;
+    padding: 35px;
+    border: 3px solid #FFD4F0;
+    border-radius: 14px;
+    box-shadow: 0 0 20px #fff5;
 }
 
-.cute-title {
+.celeste-title {
     text-align: center;
+    color: #4A3C6E;
     font-size: 22px;
-    color: #FF6FAE;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
-.cute-form input {
+.celeste-label {
+    color: #4A3C6E;
+    font-size: 12px;
+}
+
+.input-pixel {
     width: 100%;
     padding: 12px;
-    margin-bottom: 15px;
-    background: #FFF;
-    border: 2px solid #FFB7D5;
-    border-radius: 8px;
+    margin: 8px 0 15px 0;
+    border: 2px solid #4A3C6E;
+    border-radius: 6px;
+    background: #FFF0F9;
 }
 
-.cute-row {
-    display: flex;
-    gap: 10px;
-}
-
-/* —— 粉色像素按鈕 —— */
-.btn-pixel-pink {
-    background: #FFB7D5;
-    border: 3px solid #FF8EC0;
-    padding: 10px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
-.btn-pixel-pink:hover {
-    background: #FF8EC0;
-}
-
-/* —— 綠色像素按鈕 —— */
-.btn-pixel-green {
-    background: #C8FCEA;
-    border: 3px solid #9BE7C4;
+/* Buttons */
+.btn-pink {
     width: 100%;
+    background: #FFD4F0;
+    border: 3px solid #FFB2D0;
     padding: 12px;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
 }
-.btn-pixel-green:hover {
-    background: #9BE7C4;
+.btn-blue {
+    background: #AEE2FF;
+    border: 3px solid #7DC7FF;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
-.cute-error {
-    color: #FF5A5A;
-    margin-top: 10px;
-    text-align: center;
-}
-
-/* —— 聊天室 —— */
-.chat-wrapper {
-    width: 90%;
-    max-width: 900px;
-    margin: 40px auto;
-}
-
-.room-header {
-    color: #FF6FAE;
-    margin-bottom: 15px;
-}
-
-.message-area {
-    background: #FFF0F6;
-    height: 70vh;
-    padding: 15px;
+/* Chatroom */
+.chat-box {
+    background: rgba(255,255,255,0.3);
+    width: 80%;
+    margin: auto;
+    padding: 25px;
     border-radius: 12px;
+    border: 3px solid #FFD4F0;
+}
+
+.messages {
+    background: rgba(255,255,255,0.4);
+    height: 65vh;
     overflow-y: auto;
-    border: 3px solid #FFB7D5;
+    border-radius: 8px;
+    padding: 18px;
 }
 
-/* —— 訊息泡泡 —— */
-.msg-box {
+.bubble {
     display: flex;
-    gap: 10px;
-    margin: 12px 0;
-    background: #FFD9EA;
-    padding: 10px;
-    border-radius: 10px;
+    gap: 12px;
+    background: #FFEAF7;
     border: 2px solid #FFB7D5;
+    padding: 12px;
+    margin: 12px 0;
+    border-radius: 10px;
 }
 
-.avatar {
+.bubble-avatar {
     font-size: 26px;
 }
 
-.msg {
-    font-size: 14px;
-}
-
-.time {
+.bubble-time {
     font-size: 10px;
-    color: gray;
-}
-
-/* —— 輸入列 —— */
-.input-row {
-    display: flex;
-    gap: 10px;
-    margin-top: 12px;
-}
-
-.input-row input {
-    flex: 1;
-    padding: 12px;
-    border-radius: 10px;
-    border: 2px solid #FFB7D5;
-    background: white;
+    opacity: .6;
+    margin-top: 4px;
 }
