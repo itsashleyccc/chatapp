@@ -4,16 +4,16 @@
 <div class="pixel-window login-box">
   <h2 class="pixel-title">Pixel Chatroom</h2>
 
-  <form method="post" class="buttons">
+  <form method="POST" class="buttons">
 
-    <input type="text" name="name" placeholder="Your Name" value="{{name}}" />
+    <input type="text" name="name" placeholder="Your Name" value="{{name}}" required />
 
     <div class="join">
       <input type="text" name="code" placeholder="Room Code" value="{{code}}" />
-      <button name="join">Join</button>
+      <button type="submit" name="join">Join</button>
     </div>
 
-    <button name="create" class="create-btn">Create Room</button>
+    <button type="submit" name="create" class="create-btn">Create Room</button>
 
     {% if error %}
       <p class="error">{{error}}</p>
