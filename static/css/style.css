@@ -1,114 +1,69 @@
-/* ------------------------- */
-/*  Celeste Pixel Art Theme  */
-/* ------------------------- */
-
-/* Pixel 字體 */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-body {
-    margin: 0;
-    padding: 0;
-    background: radial-gradient(circle at top, #3b1e70, #0d0d2b);
-    font-family: "Press Start 2P", monospace;
-    color: #f8dfff;
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.chat-shell {
-    width: 80%;
-    max-width: 900px;
-    margin: 40px auto;
-    background: rgba(20, 10, 40, 0.7);
-    border: 3px solid #b980ff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 0 20px #b980ff70;
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-.chat-title {
-    font-size: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #e9c6ff;
+.join {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 
-/* -------------------------- */
-/*   Messages Container       */
-/* -------------------------- */
+.create-btn {
+  width: 100%;
+}
+
+.message-box {
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  background-color: whitesmoke;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  align-items: stretch;
+}
 
 .messages {
-    height: 65vh;
-    overflow-y: auto;
-    padding-right: 10px;
+  overflow-y: scroll;
+  flex: 1;
+  width: 100%;
 }
 
-/* 共同訊息外層 */
-.bubble {
-    max-width: 70%;
-    padding: 12px 16px;
-    margin: 10px 0;
-    border-radius: 10px;
-    display: flex;
-    gap: 10px;
-    font-size: 12px;
-    line-height: 1.5;
+.inputs {
+  padding: 10px;
+  display: flex;
 }
 
-/* 別人訊息（左） */
-.other {
-    background: rgba(255, 194, 255, 0.2);
-    border: 2px solid #ffbaff;
-    margin-right: auto;
-}
-
-/* 自己訊息（右） */
-.me {
-    background: rgba(184, 255, 230, 0.25);
-    border: 2px solid #a0ffe0;
-    margin-left: auto;
-}
-
-/* 頭貼 */
-.bubble-avatar {
-    font-size: 20px;
-}
-
-/* 時間 */
-.bubble-time {
-    font-size: 9px;
-    margin-top: 5px;
-    color: #d8b9ff;
-}
-
-/* -------------------------- */
-/*   Input Area               */
-/* -------------------------- */
-
-.chat-input-row {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
+h2 {
+  text-align: center;
 }
 
 #message {
-    flex: 1;
-    padding: 12px;
-    border-radius: 10px;
-    border: 2px solid #c7a0ff;
-    background: #26153d;
-    color: #f1e4ff;
-    font-family: "Press Start 2P";
+  flex: 1;
 }
 
-.chat-send-btn {
-    padding: 12px 18px;
-    background: #a868ff;
-    border: none;
-    color: white;
-    border-radius: 10px;
-    cursor: pointer;
-    font-family: "Press Start 2P";
+.text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
-.chat-send-btn:hover {
-    background: #c78bff;
+.muted {
+  font-size: 10px;
+  color: darkgray;
 }
