@@ -1,105 +1,68 @@
+import os
 from flask import Flask, render_template, request, session, redirect, url_for
-from flask_socketio import join_room, leave_room, send, SocketIO
-import random
-from string import ascii_uppercase
+from flask_socketio import SocketIO, join_room, leave_room, send
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "hjhjsdahhds"
-socketio = SocketIO(app)
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret")
+socketio = SocketIO(app, cors_allowed_origins="*")
 
-rooms = {}
-
-def generate_unique_code(length):
-    while True:
-        code = ""
-        for _ in range(length):
-            code += random.choice(ascii_uppercase)
-        
-        if code not in rooms:
-            break
-    
-    return code
-
-@app.route("/", methods=["POST", "GET"])
+@app.route("/", methods=["GET", "POST"])
 def home():
-    session.clear()
     if request.method == "POST":
-        name = request.form.get("name")
-        code = request.form.get("code")
-        join = request.form.get("join", False)
-        create = request.form.get("create", False)
+        name = request.form.get("name", "").strip()
+        room = request.form.get("room", "").strip()
 
-        if not name:
-            return render_template("home.html", error="Please enter a name.", code=code, name=name)
+        if not name or not room:
+            return render_template("home.html", error="請輸入名字與房間號碼")
 
-        if join != False and not code:
-            return render_template("home.html", error="Please enter a room code.", code=code, name=name)
-        
-        room = code
-        if create != False:
-            room = generate_unique_code(4)
-            rooms[room] = {"members": 0, "messages": []}
-        elif code not in rooms:
-            return render_template("home.html", error="Room does not exist.", code=code, name=name)
-        
-        session["room"] = room
         session["name"] = name
+        session["room"] = room
         return redirect(url_for("room"))
 
     return render_template("home.html")
 
 @app.route("/room")
 def room():
-    room = session.get("room")
-    if room is None or session.get("name") is None or room not in rooms:
+    if "name" not in session or "room" not in session:
         return redirect(url_for("home"))
-
-    return render_template("room.html", code=room, messages=rooms[room]["messages"])
-
-@socketio.on("message")
-def message(data):
-    room = session.get("room")
-    if room not in rooms:
-        return 
-    
-    content = {
-        "name": session.get("name"),
-        "message": data["data"]
-    }
-    send(content, to=room)
-    rooms[room]["messages"].append(content)
-    print(f"{session.get('name')} said: {data['data']}")
+    return render_template("room.html", name=session["name"], room=session["room"])
 
 @socketio.on("connect")
-def connect(auth):
-    room = session.get("room")
+def on_connect():
+    # 連線時不做事，等 join
+    pass
+
+@socketio.on("join")
+def on_join(data):
     name = session.get("name")
-    if not room or not name:
+    room = session.get("room")
+    if not name or not room:
         return
-    if room not in rooms:
-        leave_room(room)
-        return
-    
+
     join_room(room)
-    send({"name": name, "message": "has entered the room"}, to=room)
-    rooms[room]["members"] += 1
-    print(f"{name} joined room {room}")
+    send({"name": "系統", "message": f"{name} 加入了房間"}, to=room)
+
+@socketio.on("message")
+def on_message(data):
+    name = session.get("name")
+    room = session.get("room")
+    text = (data.get("text") or "").strip()
+
+    if not name or not room or not text:
+        return
+
+    send({"name": name, "message": text}, to=room)
 
 @socketio.on("disconnect")
-def disconnect():
-    room = session.get("room")
+def on_disconnect():
     name = session.get("name")
-    leave_room(room)
-
-    if room in rooms:
-        rooms[room]["members"] -= 1
-        if rooms[room]["members"] <= 0:
-            del rooms[room]
-    
-    send({"name": name, "message": "has left the room"}, to=room)
-    print(f"{name} has left the room {room}")
-
-import os
+    room = session.get("room")
+    if name and room:
+        try:
+            leave_room(room)
+            send({"name": "系統", "message": f"{name} 離開了房間"}, to=room)
+        except:
+            pass
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

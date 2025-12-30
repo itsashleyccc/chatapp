@@ -1,52 +1,90 @@
-{% extends 'base.html' %} {% block content %}
-<div class="message-box">
-  <h2>Chat Room: {{code}}</h2>
-  <div class="messages" id="messages"></div>
-  <div class="inputs">
-    <input
-      type="text"
-      rows="3"
-      placeholder="Message"
-      name="message"
-      id="message"
-    />
-    <button type="button" name="send" id="send-btn" onClick="sendMessage()">
-      Send
-    </button>
-  </div>
+{% extends "base.html" %}
+{% block content %}
+
+<div class="app">
+  <header class="topbar">
+    <div class="title">Room: {{ room }}</div>
+    <div class="sub">你是：{{ name }}</div>
+  </header>
+
+  <main id="messages" class="messages"></main>
+
+  <footer class="composer">
+    <textarea id="message" class="input" rows="1" placeholder="輸入訊息…"></textarea>
+    <button id="send-btn" class="send">送出</button>
+  </footer>
 </div>
-<script type="text/javascript">
-  var socketio = io();
 
-  const messages = document.getElementById("messages");
+<script>
+  const socket = io();
+  const myName = "{{ name }}";
 
-  const createMessage = (name, msg) => {
-    const content = `
-    <div class="text">
-        <span>
-            <strong>${name}</strong>: ${msg}
-        </span>
-        <span class="muted">
-            ${new Date().toLocaleString()}
-        </span>
-    </div>
-    `;
-    messages.innerHTML += content;
-  };
+  const messagesEl = document.getElementById("messages");
+  const inputEl = document.getElementById("message");
+  const sendBtn = document.getElementById("send-btn");
 
-  socketio.on("message", (data) => {
-    createMessage(data.name, data.message);
+  function scrollToBottom() {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function addMessage(sender, text) {
+    const isMine = sender === myName;
+
+    const row = document.createElement("div");
+    row.className = "row " + (isMine ? "mine" : "theirs");
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+
+    // 系統訊息特殊樣式
+    if (sender === "系統") {
+      row.className = "row system";
+      bubble.className = "bubble system-bubble";
+      bubble.textContent = text;
+    } else {
+      bubble.textContent = text;
+    }
+
+    row.appendChild(bubble);
+    messagesEl.appendChild(row);
+    scrollToBottom();
+  }
+
+  function sendMessage() {
+    const text = inputEl.value.trim();
+    if (!text) return;
+
+    socket.emit("message", { text: text });
+    inputEl.value = "";
+    inputEl.style.height = "auto";
+    inputEl.focus();
+  }
+
+  // Enter 送出；Shift+Enter 換行
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
   });
 
-  const sendMessage = () => {
-    const message = document.getElementById("message");
-    if (message.value == "") return;
-    socketio.emit("message", { data: message.value });
-    message.value = "";
-  };
+  // textarea 自動長高
+  inputEl.addEventListener("input", () => {
+    inputEl.style.height = "auto";
+    inputEl.style.height = Math.min(inputEl.scrollHeight, 140) + "px";
+  });
+
+  sendBtn.addEventListener("click", sendMessage);
+
+  // 進房間
+  socket.emit("join", {});
+
+  // 收到訊息（Flask-SocketIO 的 send 事件名就是 "message"）
+  socket.on("message", (data) => {
+    const sender = data.name || "unknown";
+    const text = data.message || "";
+    addMessage(sender, text);
+  });
 </script>
-{% for msg in messages %}
-<script type="text/javascript">
-  createMessage("{{msg.name}}", "{{msg.message}}");
-</script>
-{% endfor %} {% endblock %}
+
+{% endblock %}
