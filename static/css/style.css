@@ -1,113 +1,179 @@
-:root{
-  --bg: #eaf3ff;
-  --panel: #ffffff;
-  --text: #0f172a;
-  --muted: #64748b;
+/* ----- LINE Style Clean Theme (Light, not white) ----- */
 
-  --mine: #a7f3d0;
-  --theirs: #ffffff;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
-  --shadow: 0 10px 30px rgba(15, 23, 42, .08);
-  --border: rgba(15, 23, 42, .10);
+body {
+  background: #dceee5; /* 淺綠灰背景，不是白色 */
+  font-family: 'Inter', sans-serif;
+  padding: 0;
+  margin: 0;
+  color: #1f2a24;
 }
 
-*{ box-sizing:border-box; }
-body{
-  margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans TC", Arial;
-  background: var(--bg);
-  color: var(--text);
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 16px 0 16px;
 }
 
-.app{
-  height: 100vh;
-  max-width: 900px;
-  margin: 0 auto;
-  display:flex;
-  flex-direction:column;
+/* ----- Home Page ----- */
+.buttons {
+  background: #eef7f2;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 330px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
 }
 
-.topbar{
-  padding: 14px 16px;
-  background: var(--panel);
-  border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow);
-}
-.title{ font-weight: 800; font-size: 16px; }
-.sub{ font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-.messages{
-  flex:1;
-  padding: 16px 12px;
-  overflow:auto;
-}
-
-.row{
-  display:flex;
-  margin: 8px 0;
-}
-
-.row.mine{ justify-content:flex-end; }
-.row.theirs{ justify-content:flex-start; }
-.row.system{ justify-content:center; }
-
-.bubble{
-  max-width: min(70%, 520px);
-  padding: 10px 12px;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  box-shadow: 0 6px 18px rgba(15, 23, 42, .06);
-  background: var(--theirs);
-  white-space: pre-wrap;
-  line-height: 1.35;
-  font-size: 14px;
-}
-
-.row.mine .bubble{
-  background: var(--mine);
-  border-top-right-radius: 6px;
-}
-
-.row.theirs .bubble{
-  border-top-left-radius: 6px;
-}
-
-.system-bubble{
-  background: rgba(100, 116, 139, .12);
-  border: 1px solid rgba(100, 116, 139, .18);
-  box-shadow: none;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.composer{
-  padding: 10px;
-  background: var(--panel);
-  border-top: 1px solid var(--border);
-  display:flex;
-  gap: 10px;
-  align-items:flex-end;
-}
-
-.input{
-  flex:1;
-  resize:none;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 10px 12px;
+.buttons input {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #cfe3d8;
+  background: #f7fbf9;
+  color: #1f2a24;
   outline: none;
-  font-size: 14px;
-  line-height: 1.35;
-  background: #f8fafc;
 }
 
-.send{
-  border: 0;
-  background: #22c55e;
-  color: white;
-  font-weight: 700;
-  padding: 10px 14px;
-  border-radius: 14px;
-  cursor:pointer;
+.buttons input:focus {
+  border-color: #27ae60;
 }
-.send:active{ transform: translateY(1px); }
+
+.buttons input::placeholder {
+  color: #7f948a;
+}
+
+.join {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.join input {
+  flex: 1;
+}
+
+.create-btn {
+  width: 100%;
+}
+
+.buttons button {
+  background: #27ae60;
+  border: none;
+  color: white;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
+}
+
+.buttons button:hover {
+  background: #219653;
+}
+
+/* ----- Chat room ----- */
+.message-box {
+  background: #eef7f2;
+  border-radius: 18px;
+  padding: 18px;
+  width: min(900px, 92vw);
+  height: 80vh;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  color: #219653;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+}
+
+/* 訊息區 */
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 對方訊息 */
+.text {
+  background: #f7fbf9;
+  border: 1px solid #d6e8de;
+  padding: 10px 12px;
+  border-radius: 14px;
+  max-width: 72%;
+  align-self: flex-start;
+  color: #1f2a24;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.text strong {
+  color: #1f2a24;
+}
+
+/* 自己訊息 */
+.me {
+  background: #dff7e7;
+  border: 1px solid #bfe9cf;
+  align-self: flex-end;
+}
+
+/* 時間字 */
+.muted {
+  font-size: 10px;
+  color: #7f948a;
+  margin-top: 4px;
+  text-align: right;
+}
+
+/* 輸入區 */
+.inputs {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+#message {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #cfe3d8;
+  background: #f7fbf9;
+  color: #1f2a24;
+  outline: none;
+}
+
+#message:focus {
+  border-color: #27ae60;
+}
+
+#message::placeholder {
+  color: #7f948a;
+}
+
+#send-btn {
+  padding: 12px 18px;
+  background: #27ae60;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
+}
+
+#send-btn:hover {
+  background: #219653;
+}
