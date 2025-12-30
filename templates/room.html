@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="message-box">
-  <h2>聊天室：{{code}}</h2>
+  <h2>房間：{{ code }}</h2>
 
   <div class="messages" id="messages"></div>
 
@@ -9,13 +9,10 @@
     <input
       type="text"
       placeholder="輸入訊息（Enter 送出）"
-      name="message"
       id="message"
       autocomplete="off"
     />
-    <button type="button" name="send" id="send-btn" onClick="sendMessage()">
-      送出
-    </button>
+    <button type="button" id="send-btn" onclick="sendMessage()">送出</button>
   </div>
 </div>
 
@@ -34,7 +31,7 @@
     `;
 
     messages.innerHTML += content;
-    messages.scrollTop = messages.scrollHeight; // 自動捲到底
+    messages.scrollTop = messages.scrollHeight;
   };
 
   socketio.on("message", (data) => {
@@ -42,14 +39,15 @@
   });
 
   const sendMessage = () => {
-    const message = document.getElementById("message");
-    if (message.value.trim() === "") return;
+    const input = document.getElementById("message");
+    const text = input.value.trim();
+    if (text === "") return;
 
-    socketio.emit("message", { data: message.value });
-    message.value = "";
+    socketio.emit("message", { data: text });
+    input.value = "";
   };
 
-  // 按 Enter 送出
+  // Enter 送出
   const messageInput = document.getElementById("message");
   messageInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
@@ -61,7 +59,7 @@
 
 {% for msg in messages %}
 <script type="text/javascript">
-  createMessage("{{msg.name}}", "{{msg.message}}");
+  createMessage("{{ msg.name }}", "{{ msg.message }}");
 </script>
 {% endfor %}
 {% endblock %}

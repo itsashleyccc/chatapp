@@ -1,9 +1,7 @@
-/* ----- LINE Style Clean Theme (Light, not white) ----- */
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
 body {
-  background: #dceee5; /* 淺綠灰背景，不是白色 */
+  background: #dceee5;
   font-family: 'Inter', sans-serif;
   padding: 0;
   margin: 0;
@@ -17,7 +15,7 @@ body {
   padding: 50px 16px 0 16px;
 }
 
-/* ----- Home Page ----- */
+/* Home */
 .buttons {
   background: #eef7f2;
   padding: 25px;
@@ -29,38 +27,30 @@ body {
   min-width: 330px;
   max-width: 420px;
   width: 100%;
-  text-align: center;
 }
 
 .buttons input {
+  width: 100%;
   padding: 12px;
   border-radius: 12px;
   border: 1px solid #cfe3d8;
   background: #f7fbf9;
   color: #1f2a24;
   outline: none;
+  box-sizing: border-box;
 }
 
 .buttons input:focus {
   border-color: #27ae60;
 }
 
-.buttons input::placeholder {
-  color: #7f948a;
-}
-
 .join {
   display: flex;
   gap: 10px;
-  width: 100%;
 }
 
 .join input {
   flex: 1;
-}
-
-.create-btn {
-  width: 100%;
 }
 
 .buttons button {
@@ -78,7 +68,11 @@ body {
   background: #219653;
 }
 
-/* ----- Chat room ----- */
+.create-btn {
+  width: 100%;
+}
+
+/* Room */
 .message-box {
   background: #eef7f2;
   border-radius: 18px;
@@ -96,7 +90,6 @@ h2 {
   margin: 0 0 10px 0;
 }
 
-/* 訊息區 */
 .messages {
   flex: 1;
   overflow-y: auto;
@@ -106,7 +99,6 @@ h2 {
   gap: 10px;
 }
 
-/* 對方訊息 */
 .text {
   background: #f7fbf9;
   border: 1px solid #d6e8de;
@@ -119,18 +111,12 @@ h2 {
   word-break: break-word;
 }
 
-.text strong {
-  color: #1f2a24;
-}
-
-/* 自己訊息 */
 .me {
   background: #dff7e7;
   border: 1px solid #bfe9cf;
   align-self: flex-end;
 }
 
-/* 時間字 */
 .muted {
   font-size: 10px;
   color: #7f948a;
@@ -138,7 +124,6 @@ h2 {
   text-align: right;
 }
 
-/* 輸入區 */
 .inputs {
   display: flex;
   gap: 10px;
@@ -157,10 +142,6 @@ h2 {
 
 #message:focus {
   border-color: #27ae60;
-}
-
-#message::placeholder {
-  color: #7f948a;
 }
 
 #send-btn {
